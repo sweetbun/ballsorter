@@ -5,7 +5,8 @@ package body Released_Ball is
 
 	protected body Pro_Ball_List is
 		
-		entry Push (Item : Ball_Detected) is
+		entry Push (Item : Ball_Detected)
+			when True is
 			tmp : Ball_Access := new Ball;
 		begin
 			tmp.Item := Item;
@@ -19,17 +20,16 @@ package body Released_Ball is
 			end if;
 		end Push;
 
-		entry Pop (Item : out Ball_Detected) is
+		entry Pop (Item : out Ball_Detected)
+			when Head /= null is
 		begin
-			if Head = null then
-				raise Empty_Error;
-			end if;
 			Item := Tail.Item;
 			Tail := Tail.Prev;
 			Tail.Next := null;
 		end Pop;
 
-		entry Queue (Item : Ball_Detected) is
+		entry Queue (Item : Ball_Detected)
+			when True is
 			tmp : Ball_Access := new Ball;
 		begin
 			tmp.Item := Item;
@@ -41,42 +41,33 @@ package body Released_Ball is
 				Head.Prev:= tmp;
 				Head := tmp;
 			end if;
-		end Unshift;
+		end Queue;
 
-		entry Unqueue (Item : out Ball_Detected) is
+		entry Unqueue (Item : out Ball_Detected)
+			when Head /= null is
 		begin
-			if Head = null then
-				raise Empty_Error;
-			end if;
 			Item := Head.Item;
 			Head := Head.Next;
 			Tail.Prev := null;
-		end Shift;
+		end Unqueue;
 
-		entry AlterHead (Item : Ball_Detected) is
+		entry AlterHead (Item : Ball_Detected)
+			when Head /= null is
 		begin
-			if Head = null then
-				raise Empty_Error;
-			end if;
 			Head.Item := Item;
 		end AlterHead;
 
-		entry AlterTail (Item : Ball_Detected) is
+		entry AlterTail (Item : Ball_Detected)
+			when Tail /= null is
 		begin
-			if Tail = null then
-				raise Empty_Error;
-			end if;
 			Tail.Item := Item;
 		end AlterTail;
 
-		entry AlterNHead (Item : Ball_Detected; N : Natural) is
+		entry AlterNHead (Item : Ball_Detected; N : Natural)
+			when Head /= null is
 			tmp : Ball_Access;
 			tmpN : Natural := N;
 		begin
-			if Head = null then
-				raise Empty_Error;
-			end if;
-
 			tmp := Head;
 
 			while tmpN > 0 loop
@@ -90,14 +81,11 @@ package body Released_Ball is
 			tmp.Item := Item;
 		end AlterNHead;
 
-		entry AlterNTail (Item : Ball_Detected; N : Natural) is
+		entry AlterNTail (Item : Ball_Detected; N : Natural)
+			when Tail /= null is
 			tmp : Ball_Access;
 			tmpN : Natural := N;
 		begin
-			if Tail = null then
-				raise Empty_Error;
-			end if;
-
 			tmp := Tail;
 
 			while tmpN > 0 loop

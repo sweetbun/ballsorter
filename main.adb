@@ -5,7 +5,7 @@ with Released_Ball; use Released_Ball;
 
 procedure Main is
 
-	Balls : Ball_List;
+	Balls : Pro_Ball_List;
 
 	task Toggler is
 		entry Detected;
@@ -40,7 +40,7 @@ procedure Main is
 			Hopper_Load;
 			delay until Start + 0.25;
 			Hopper_Unload;
-			push(Unknown, Balls);
+			Balls.Push(Unknown);
 			delay until Start + 0.8;
 			
 		end loop;
@@ -63,9 +63,9 @@ begin
 	Get_Ball(Ball, Start_Time);
 	
 	if Ball = Metal then
-		AlterTail(Metal, Balls);
+		Balls.AlterTail(Metal);
 	else
-		Shift(Ball, Balls);
+		Balls.Unqueue(Ball);
 		if Ball = Unknown then
 			Toggler.Detected;
 		end if;
