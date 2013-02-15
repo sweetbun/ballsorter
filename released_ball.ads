@@ -2,22 +2,26 @@ with MaRTE_OS;
 with Chute; use Chute;
 
 package Released_Ball is
-	type Ball_List is limited private;
+	protected type Pro_Ball_List is
+		entry Push (Item : Ball_Detected);
+		entry Pop (Item : out Ball_Detected);
+
+		entry Queue (Item : Ball_Detected);
+		entry Unqueue (Item : out Ball_Detected);
+
+		entry AlterHead (Item : Ball_Detected);
+		entry AlterTail (Item : Ball_Detected);
+
+		entry AlterNHead (Item : Ball_Detected; N : Natural);
+		entry AlterNTail (Item : Ball_Detected; N : Natural);
+
+	private
+		Head : Ball_Access;
+		Tail : Ball_Access;
+	end Pro_Ball_List;
 	
 	Empty_Error : exception;
 	Null_Error : exception;
-	
-	procedure Push (Item : Ball_Detected; To : in out Ball_List);
-	procedure Pop (Item : out Ball_Detected; From : in out Ball_List);
-	
-	procedure Unshift (Item : Ball_Detected; To : in out Ball_List);
-	procedure Shift (Item : out Ball_Detected; From : in out Ball_List);
-	
-	procedure AlterHead (Item : Ball_Detected; From : in out Ball_List);
-	procedure AlterTail (Item : Ball_Detected; From : in out Ball_List);
-
-	procedure AlterNHead (Item : Ball_Detected; N : Natural; From : in out Ball_List);
-	procedure AlterNTail (Item : Ball_Detected; N : Natural; From : in out Ball_List);
 	
 private
 	type Ball;
@@ -29,8 +33,4 @@ private
 		Prev : Ball_Access := null;
 	end record;
 	
-	type Ball_List is record
-		Head : Ball_Access;
-		Tail : Ball_Access;
-	end record;
 end Released_Ball;
