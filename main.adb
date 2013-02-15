@@ -7,7 +7,7 @@ procedure Main is
 
 	Balls : Pro_Ball_List;
 
-	task Toggler is
+	task type Toggler is
 		entry Detected;
 	end Toggler;
 
@@ -53,6 +53,11 @@ task body Detector is
 	Last_Time : Time;
 	Ball : Ball_Detected;
 	Previous_Ball : Ball_Detected;
+
+	type Unsigned_1 is mod 2;
+	Togglers : array (Unsigned_1) of Toggler;
+	
+	Index : Unsigned_1 := 0;
 begin
 	Get_Ball(Ball, Start_Time);
 	Get_Ball(Ball, Start_Time);
@@ -67,7 +72,8 @@ begin
 	else
 		Balls.Unqueue(Ball);
 		if Ball = Unknown then
-			Toggler.Detected;
+			Togglers(Index).Detected;
+			Index := Index + 1;
 		end if;
 	end if;
 	
